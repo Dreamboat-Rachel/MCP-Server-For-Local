@@ -62,7 +62,7 @@ class MCPClient:
             你是一个智能助手，可以根据用户输入决定是否调用工具。当前通过代理服务端支持以下底层工具：
             - query_weather: 查询指定城市代码的天气信息，输入参数为城市代码（如 '110000' 表示北京，'330100' 表示杭州）
             - google_search: 使用 google_search 工具，参数名必须是 query，打开本地谷歌浏览器并搜索指定关键词，输入参数为搜索关键词（如 'Python tutorial'）。
-            - capture_camera_image：使用 capture_camera_image 工具，拍照。
+            - capture_camera_image：使用 capture_camera_image 工具，拍照并进行微表情分析。
 
             代理服务端工具：
             {tool_descriptions}
@@ -110,11 +110,9 @@ class MCPClient:
                         if not tool_name:
                             return "⚠️ 工具名称缺失"
 
-                        # 包装参数为 {"params": {...}} 结构
                         proxy_params = {
                             "params": {"tool": tool_name, "args": tool_args}
                         }
-                        # print(f"DEBUG: Calling proxy_tool_call with params: {proxy_params}")
                         result = await self.session.call_tool("proxy_tool_call", proxy_params)
                         return result.content[0].text
                 return content

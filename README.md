@@ -9,7 +9,7 @@ MCP（Model Context Protocol）是由 Anthropic 开发的一种开源协议，�
 
 - **天气查询**：通过 MCP 服务器连接外部天气 API（如 OpenWeatherMap），支持实时获取指定位置的天气预报和警报信息。用户只需输入指定地点，即可获得格式化的天气数据。
 - **谷歌自动检索**：利用 MCP 工具，AI 可以动态调用谷歌搜索功能，自动检索相关信息并返回结果，适用于需要实时外部知识的场景。
-- **摄像头控制**：集成了摄像头操作功能，通过 MCP 定义的工具，开发者可以控制摄像头执行拍摄、流媒体传输等任务，并支持自定义参数配置。
+- **拍照实现微表情分析**：集成了摄像头操作功能，通过 MCP 定义的工具，开发者可以控制摄像头执行拍摄、流媒体传输等任务，采用轻量化DeepFace，并支持自定义参数配置。
 
 ### 开发者自由配置
 
@@ -53,7 +53,10 @@ source .venv/bin/activate
 ### 3. 安装 MCP SDK
 ```bash
 uv add mcp
+uv pip install numpy==1.23.5 tensorflow==2.12.0 keras==2.12.0 deepface==0.0.   79                                                        
 uv pip install dashscope
+uv pip install opencv-python
+uv pip install selenium
 ```
 
 ### 4. main.py运行代码（可选）
