@@ -2,11 +2,10 @@ import asyncio
 import os
 import json
 import sys
-from typing import Optional
+from typing import Optional, List
 from contextlib import AsyncExitStack
 from dashscope import Generation
 from dotenv import load_dotenv
-
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
@@ -46,9 +45,20 @@ class MCPClient:
 
         await self.session.initialize()
 
+        available_tools = [
+            {"name": "query_weather", "description": "查询指定城市代码的天气信息", "inputSchema": {"city_code": "string"}},
+            {"name": "google_search", "description": "使用谷歌搜索关键词", "inputSchema": {"query": "string"}},
+            {"name": "capture_camera_image", "description": "拍照并进行微表情分析", "inputSchema": {}},
+            {"name": "generate_image", "description": "生成图片", "inputSchema": {}}
+        ]
+        print("\n已连接到服务器，支持以下工具:", [tool["name"] for tool in available_tools])
+
+    async def get_available_tools(self) -> List[str]:
+        """获取当前可用的工具列表"""
+        if not self.session:
+            return []
         response = await self.session.list_tools()
-        tools = response.tools
-        print("\n已连接到服务器，支持以下工具:", [tool.name for tool in tools])
+        return [tool.name for tool in response.tools]
 
     async def process_query(self, query: str) -> str:
         """使用 DashScope 处理查询，通过代理服务端调用工具"""
@@ -63,6 +73,7 @@ class MCPClient:
             - query_weather: 查询指定城市代码的天气信息，输入参数为城市代码（如 '110000' 表示北京，'330100' 表示杭州）
             - google_search: 使用 google_search 工具，参数名必须是 query，打开本地谷歌浏览器并搜索指定关键词，输入参数为搜索关键词（如 'Python tutorial'）。
             - capture_camera_image：使用 capture_camera_image 工具，拍照并进行微表情分析。
+            - generate_image：使用 generate_image 工具来进行生图。
 
             代理服务端工具：
             {tool_descriptions}

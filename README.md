@@ -3,13 +3,14 @@
 
 MCP（Model Context Protocol）是由 Anthropic 开发的一种开源协议，旨在为 AI 模型提供与外部数据源和工具交互的标准化方式。它就像 AI 应用的“通用接口”，通过客户端-服务器架构，让语言模型（如 Claude）能够安全、高效地访问实时数据、执行操作并扩展功能。MCP 的核心优势在于其统一性与模块化，开发者无需为每个工具或数据源编写定制集成，只需实现 MCP 协议即可让 AI 无缝连接。
 
-### 我的 MCP 实现：天气查询、谷歌自动检索与摄像头控制
+### 我的 MCP 实现：天气查询、谷歌自动检索与摄像头控制进行微表情分析
 
 我基于 MCP 开发了一个多功能配置，集成了以下特性，开发者可根据需求自由调整：
 
 - **天气查询**：通过 MCP 服务器连接外部天气 API（如 OpenWeatherMap），支持实时获取指定位置的天气预报和警报信息。用户只需输入指定地点，即可获得格式化的天气数据。
 - **谷歌自动检索**：利用 MCP 工具，AI 可以动态调用谷歌搜索功能，自动检索相关信息并返回结果，适用于需要实时外部知识的场景。
 - **拍照实现微表情分析**：集成了摄像头操作功能，通过 MCP 定义的工具，开发者可以控制摄像头执行拍摄、流媒体传输等任务，采用轻量化DeepFace，并支持自定义参数配置。
+- **Comfyui生图**：集成Comfyui 进行生图，开发者可以自由的实现自己想要的图片内容。
 
 ### 开发者自由配置
 
@@ -53,10 +54,11 @@ source .venv/bin/activate
 ### 3. 安装 MCP SDK
 ```bash
 uv add mcp
-uv pip install numpy==1.23.5 tensorflow==2.12.0 keras==2.12.0 deepface==0.0.   79                                                        
+uv pip install numpy==1.23.5 tensorflow==2.12.0 keras==2.12.0 deepface==0.0.79
 uv pip install dashscope
 uv pip install opencv-python
 uv pip install selenium
+uv pip install gradio
 ```
 
 ### 4. main.py运行代码（可选）

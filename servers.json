@@ -10,5 +10,9 @@
     {
         "name": "CameraCaptureServer",
         "script": "capture_server.py"
+    },
+    {
+        "name": "ComfyUIImageGenServer",
+        "script": "generate_image_server.py"
     }
 ]
