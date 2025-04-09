@@ -1,7 +1,7 @@
 ## MCP（Model Context Protocol）简介
 **官方地址**：https://github.com/modelcontextprotocol/python-sdk
 
-MCP（Model Context Protocol）是由 Anthropic 开发的一种开源协议，旨在为 AI 模型提供与外部数据源和工具交互的标准化方式。它就像 AI 应用的“通用接口”，通过客户端-服务器架构，让语言模型（如 Claude）能够安全、高效地访问实时数据、执行操作并扩展功能。MCP 的核心优势在于其统一性与模块化，开发者无需为每个工具或数据源编写定制集成，只需实现 MCP 协议即可让 AI 无缝连接。
+MCP（Model Context Protocol）是由 Anthropic 开发的一种开源协议，旨在为 AI 模型提供与外部数据源和工具交互的标准化方式。它就像 AI 应用的"通用接口"，通过客户端-服务器架构，让语言模型（如 Claude）能够安全、高效地访问实时数据、执行操作并扩展功能。MCP 的核心优势在于其统一性与模块化，开发者无需为每个工具或数据源编写定制集成，只需实现 MCP 协议即可让 AI 无缝连接。
 
 ### 我的 MCP 实现：天气查询、谷歌自动检索与摄像头控制进行微表情分析
 
@@ -81,3 +81,160 @@ python main.py
   ```
   安装完成后，可根据项目需求配置天气查询、谷歌检索或摄像头控制等功能（详见项目文档）。
   通过以上步骤，你已成功搭建 MCP 客户端的开发环境，可以开始开发和测试了！
+
+# MCP Server for Local
+
+一个基于 MCP (Multi-Component Platform) 的本地代理服务器和客户端实现。
+
+## 功能特点
+
+- 支持多种工具调用（天气查询、谷歌搜索、摄像头拍照、图片生成等）
+- 跨平台支持（Windows 和 Linux）
+- 可扩展的服务器架构
+- 基于 DashScope 的智能对话
+- 完整的日志系统
+
+## 系统要求
+
+- Python 3.8+
+- Node.js (可选，用于运行 JavaScript 服务器)
+- Chrome 浏览器（用于谷歌搜索功能）
+- 摄像头（用于拍照功能）
+
+## 安装
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/yourusername/mcp-server-for-local.git
+cd mcp-server-for-local
+```
+
+2. 创建并激活虚拟环境：
+```bash
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
+
+# Linux
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+3. 安装依赖：
+```bash
+pip install -r requirements.txt
+```
+
+4. 配置环境变量：
+```bash
+# 复制环境变量模板
+cp .env.example .env
+
+# 编辑 .env 文件，设置你的配置
+```
+
+## 配置说明
+
+### 环境变量
+
+编辑 `.env` 文件，设置以下配置：
+
+- `DASHSCOPE_API_KEY`: DashScope API 密钥
+- `MODEL`: 使用的模型名称（默认：qwen-max）
+- `CONFIG_FILE`: 服务器配置文件路径
+- `GAODE_API_KEY`: 高德地图 API 密钥
+- `CHROME_PATH`: Chrome 浏览器路径
+- `CHROMEDRIVER_PATH`: ChromeDriver 路径
+- `BASE_URL`: ComfyUI 服务器地址
+- `SERVERS_DIR`: 服务器脚本目录
+
+### 服务器配置
+
+编辑 `servers.json` 文件，配置你的服务器：
+
+```json
+[
+    {
+        "name": "WeatherServer",
+        "script": "weather_server.py"
+    },
+    {
+        "name": "GoogleSearchServer",
+        "script": "google_search_server.py"
+    },
+    {
+        "name": "CameraCaptureServer",
+        "script": "capture_server.py"
+    },
+    {
+        "name": "ComfyUIImageGenServer",
+        "script": "generate_image_server.py"
+    }
+]
+```
+
+## 使用方法
+
+1. 启动代理服务器：
+```bash
+# Windows
+python src/mcp/proxy/proxy_server.py
+
+# Linux
+python3 src/mcp/proxy/proxy_server.py
+```
+
+2. 启动客户端：
+```bash
+# Windows
+python src/mcp/client/mcp_client.py path/to/proxy_server.py
+
+# Linux
+python3 src/mcp/client/mcp_client.py path/to/proxy_server.py
+```
+
+3. 在客户端中输入命令，例如：
+- "北京的天气怎么样？"
+- "在谷歌上搜索 Python 教程"
+- "拍照"
+- "生成一张猫的图片"
+
+## 跨平台注意事项
+
+### Windows 用户
+- 使用反斜杠 `\` 或正斜杠 `/` 作为路径分隔符
+- Chrome 通常安装在 `C:\Program Files\Google\Chrome\Application\chrome.exe`
+- Python 命令使用 `python`
+
+### Linux 用户
+- 使用正斜杠 `/` 作为路径分隔符
+- Chrome 通常安装在 `/usr/bin/google-chrome`
+- Python 命令使用 `python3`
+- 确保脚本有执行权限：`chmod +x script.py`
+
+## 故障排除
+
+1. 如果遇到权限问题：
+```bash
+# Linux
+chmod +x src/mcp/proxy/proxy_server.py
+chmod +x src/mcp/client/mcp_client.py
+```
+
+2. 如果遇到路径问题：
+- 确保所有路径使用绝对路径
+- 检查路径分隔符是否正确
+- 确保文件存在且有正确的权限
+
+3. 如果遇到 Chrome 相关问题：
+- 确保 Chrome 和 ChromeDriver 版本匹配
+- 检查 Chrome 路径是否正确
+- 确保有足够的权限运行 Chrome
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 许可证
+
+MIT License

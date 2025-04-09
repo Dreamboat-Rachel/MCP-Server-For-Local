@@ -14,7 +14,10 @@ logger = logging.getLogger(__name__)
 # 初始化 MCP 服务器
 mcp = FastMCP("CameraCaptureServer")
 load_dotenv()
-image_save_path = os.getenv("IMAGE_SAVE_PATH")
+
+# 设置保存路径
+SAVE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "save")
+os.makedirs(SAVE_DIR, exist_ok=True)
 
 def capture_and_analyze():
     try:
@@ -27,7 +30,7 @@ def capture_and_analyze():
             cap.release()
             return "⚠️ 无法读取画面"
         random_suffix = random.randint(10000, 99999)
-        image_path = f"{image_save_path}captured_image_{random_suffix}.jpg"
+        image_path = os.path.join(SAVE_DIR, f"captured_image_{random_suffix}.jpg")
         cv2.imwrite(image_path, frame)
         cap.release()
         logger.debug(f"图片保存至 {image_path}")
