@@ -1,0 +1,9 @@
+mcp
+numpy==1.23.5
+tensorflow==2.12.0
+keras==2.12.0
+deepface==0.0.79
+dashscope
+opencv-python
+selenium
+gradio 
